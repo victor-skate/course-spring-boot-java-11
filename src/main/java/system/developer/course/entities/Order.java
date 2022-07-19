@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity 
 @Table(name = "tb_order")
 public class Order implements Serializable{
@@ -19,10 +21,14 @@ public class Order implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'",timezone = "GMT")
 	private Instant moment;//PARA TRABALHAR COM DATAS, É MUITO SUPERIOR AO TIPO DATE
 	
 	@ManyToOne //MUITOS PEDIDOS PARA UM CLIENTE
 	@JoinColumn(name = "client_id")//NOME DA CHAVE ESTRANGEIRA NA TABELA ORDER
+	//@JsonIgnore ESSA ANOTAÇÃO DESSE LADO DA ASSOCIAÇÃO FAZ COM QUE QUANDO EU BUSCAR UM client
+	//SEJAM RETORNADOS OS PEDIDOS RELACIONADOS A ELE SEM GERAR EXCEÇÃO DE LOOP INFINITO
 	private User client;
 	
 	public Order() {

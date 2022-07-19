@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /*SERIALIZABLE TRANSFORMA O OBJ EM UMA CADEIA DE BITS PARA QUE 
 ELE POSSA TRAFEGAR PELA REDE,SER GRAVADO EM ARQUIVOS E ASSIM POR DIANTE*/ 
 @Entity
@@ -29,6 +31,7 @@ public class User implements Serializable {
 	
 	//UM CLIENTE PARA MUITOS PEDIDOS
 	@OneToMany(mappedBy = "client")//INDICA QUE NA CLASSE PEDIDO ESSE RELACIONAMENTO ESTA MAPEADO PELO ATRIBUTO client
+	@JsonIgnore//NA CLASSE ORDER TA EXPLICADO O USO DESSA ANOTAÇÃO. POREM DECIDI USAR DESSE LADO DA ASSOCIAÇÃO
 	private List<Order> orders = new ArrayList<>();
 	
 	public User() {
