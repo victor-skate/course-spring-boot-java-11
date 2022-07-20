@@ -13,32 +13,37 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Entity 
+@Entity
 @Table(name = "tb_order")
-public class Order implements Serializable{
-	
+public class Order implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'",timezone = "GMT")
-	private Instant moment;//PARA TRABALHAR COM DATAS, É MUITO SUPERIOR AO TIPO DATE
-	
-	@ManyToOne //MUITOS PEDIDOS PARA UM CLIENTE
-	@JoinColumn(name = "client_id")//NOME DA CHAVE ESTRANGEIRA NA TABELA ORDER
-	//@JsonIgnore ESSA ANOTAÇÃO DESSE LADO DA ASSOCIAÇÃO FAZ COM QUE QUANDO EU BUSCAR UM client
-	//SEJAM RETORNADOS OS PEDIDOS RELACIONADOS A ELE SEM GERAR EXCEÇÃO DE LOOP INFINITO
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+	private Instant moment;// PARA TRABALHAR COM DATAS, É MUITO SUPERIOR AO TIPO DATE
+
+	private Integer orderStatus;
+
+	@ManyToOne // MUITOS PEDIDOS PARA UM CLIENTE
+	@JoinColumn(name = "client_id") // NOME DA CHAVE ESTRANGEIRA NA TABELA ORDER
+	// @JsonIgnore ESSA ANOTAÇÃO DESSE LADO DA ASSOCIAÇÃO FAZ COM QUE QUANDO EU
+	// BUSCAR UM client
+	// SEJAM RETORNADOS OS PEDIDOS RELACIONADOS A ELE SEM GERAR EXCEÇÃO DE LOOP
+	// INFINITO
 	private User client;
-	
+
 	public Order() {
-		
+
 	}
-	
-	public Order(Long id, Instant moment, User client) {
+
+	public Order(Long id, Instant moment, OrderStatus status, User client) {
 		super();
 		this.id = id;
 		this.moment = moment;
+		setOrderStatus(status);
 		this.client = client;
 	}
 
@@ -56,6 +61,16 @@ public class Order implements Serializable{
 
 	public void setMoment(Instant moment) {
 		this.moment = moment;
+	}
+
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(orderStatus);
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode();
+		}
 	}
 
 	public User getClient() {
@@ -90,7 +105,5 @@ public class Order implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }
