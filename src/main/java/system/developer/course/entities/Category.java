@@ -8,8 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_category")
@@ -21,7 +23,8 @@ public class Category implements Serializable {
 	private Long id;
 	private String name;
 	
-	@Transient
+	@JsonIgnore //QUANDO BUSCAR UM PRODUTO, MOSTRA A CATEGORIA MAS NÃO MOSTRA OS PRODUTOS DESSA CATEGORIA PARA NAO ENTRAR EM LOOP INFINITO
+	@ManyToMany(mappedBy = "categories")//ESSE RELACIONAMENTO JA FOI MAPEADO NA CLASSE PRODUCT PELO ATRIBUTO categories	
 	private Set<Product> products = new HashSet<>();
 
 	public Category() {
