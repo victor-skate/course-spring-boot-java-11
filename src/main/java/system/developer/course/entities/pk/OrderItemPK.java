@@ -13,7 +13,7 @@ import system.developer.course.entities.Product;
 public class OrderItemPK implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne
+	@ManyToOne  //AQUI EU DIGO QUE O ITEM_PEDIDO TEM UM PEDIDO
 	@JoinColumn(name = "order_id")
 	private Order order;
 	

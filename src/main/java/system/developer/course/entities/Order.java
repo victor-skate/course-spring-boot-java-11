@@ -2,6 +2,8 @@ package system.developer.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity; //É PREFERÍVEL IMPORTAR ESSA ESPECIFICAÇÃO INVÉS DA IMPLEMENTAÇÃO
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -34,9 +37,11 @@ public class Order implements Serializable {
 	// SEJAM RETORNADOS OS PEDIDOS RELACIONADOS A ELE SEM GERAR EXCEÇÃO DE LOOP
 	// INFINITO
 	private User client;
-
+	
+	@OneToMany(mappedBy = "id.order")//O OrderItem TEM O id EO id É QUE TEM O PEDIDO. OBSERVE O ATRIBUTO id NA CLASSE OrderItem
+	private Set<OrderItem> items = new HashSet<>();
+	
 	public Order() {
-
 	}
 
 	public Order(Long id, Instant moment, OrderStatus status, User client) {
@@ -79,6 +84,10 @@ public class Order implements Serializable {
 
 	public void setClient(User client) {
 		this.client = client;
+	}
+	
+	public Set<OrderItem> getItem(){
+		return items;
 	}
 
 	@Override
