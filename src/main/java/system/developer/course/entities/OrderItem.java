@@ -9,13 +9,14 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import system.developer.course.entities.pk.OrderItemPK;
+
 @Entity
 @Table(name = "tb_order_item")
 public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@EmbeddedId
-	private OrderItemPK id = new OrderItemPK();//ESSE ID TEM O PEDIDO, OBSERVAR NA CLASSE OrderItemPK
+	private OrderItemPK id = new OrderItemPK();// ESSE ID TEM O PEDIDO, OBSERVAR NA CLASSE OrderItemPK
 
 	private Integer quantity;
 	private Double price;
@@ -39,7 +40,7 @@ public class OrderItem implements Serializable {
 	public void setOrder(Order order) {
 		id.setOrder(order);
 	}
-	
+
 	public Product getProduct() {
 		return id.getProduct();
 	}
@@ -62,6 +63,10 @@ public class OrderItem implements Serializable {
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public Double getSubTotal() {
+		return price * quantity;
 	}
 
 	@Override
