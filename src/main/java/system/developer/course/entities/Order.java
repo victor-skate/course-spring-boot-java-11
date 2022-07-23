@@ -41,6 +41,8 @@ public class Order implements Serializable {
 	@OneToMany(mappedBy = "id.order")//O OrderItem TEM O id EO id É QUE TEM O PEDIDO. OBSERVE O ATRIBUTO id NA CLASSE OrderItem
 	private Set<OrderItem> items = new HashSet<>();
 	
+
+	
 	public Order() {
 	}
 
@@ -86,6 +88,7 @@ public class Order implements Serializable {
 		this.client = client;
 	}
 	
+
 	public Set<OrderItem> getItem(){
 		return items;
 	}

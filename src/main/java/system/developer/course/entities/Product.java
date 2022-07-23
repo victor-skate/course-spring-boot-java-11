@@ -11,12 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_product")
-public class Product implements Serializable{
-	
+public class Product implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,11 +30,15 @@ public class Product implements Serializable{
 	private String imgUrl;
 
 	@ManyToMany
-	@JoinTable(name = "tb_product_category",//CRIA UMA TABELA DE JUNÇÃO COM AS CHAVES ESTRANGEIRAS DAS TABELAS RELACIONADAS
-	joinColumns = @JoinColumn(name = "product_id"),//COLUNA DE JUNÇÃO DA TABELA Product é product_id
-	inverseJoinColumns = @JoinColumn(name = "category_id"))//COLUNA DE JUNÇÃO DA TABELA Category é category_id
+	@JoinTable(name = "tb_product_category", // CRIA UMA TABELA DE JUNÇÃO COM AS CHAVES ESTRANGEIRAS DAS TABELAS
+												// RELACIONADAS
+			joinColumns = @JoinColumn(name = "product_id"), // COLUNA DE JUNÇÃO DA TABELA Product é product_id
+			inverseJoinColumns = @JoinColumn(name = "category_id")) // COLUNA DE JUNÇÃO DA TABELA Category é category_id
 	private Set<Category> categories = new HashSet<>();
-	
+
+	@OneToMany(mappedBy = "id.product") // ESTÁ EXPLICADO NA CLASSE Order
+	private Set<OrderItem> items = new HashSet<>();
+
 	public Product() {
 	}
 
@@ -88,6 +95,19 @@ public class Product implements Serializable{
 		return categories;
 	}
 
+	// BUSCANDO OS PEDIDOS QUE O PRODUTO ESTÁ RELACIONADO. COMO É O OrderItem QUE
+	// POSSUI O PEDIDO E PRODUTOS,
+	// É ATRAVÉS DELE QUE BUSCAMOS OS PEDIDOS NOS QUAIS UM DETERMINADO PRODUTO ESTÁ
+	// RELACIONADO
+	@JsonIgnore
+	public Set<Order> getOrders() {
+		Set<Order> set = new HashSet<>();
+		for (OrderItem x : items) {
+			set.add(x.getOrder());
+		}
+		return set;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -113,5 +133,4 @@ public class Product implements Serializable{
 		return true;
 	}
 
-	
 }

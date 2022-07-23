@@ -14,7 +14,7 @@ import system.developer.course.services.ProductService;
 
 @RestController
 @RequestMapping(value= "/products")
-public class ProducdtResource {
+public class ProductResource {
 	
 	@Autowired
 	private ProductService service;
